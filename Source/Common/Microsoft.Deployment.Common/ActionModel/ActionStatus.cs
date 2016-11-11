@@ -49,8 +49,10 @@
 
                 case ActionStatus.UnhandledException:
                     return "506";
+
+                default:
+                    return "500";
             }
-            return "500";
         }
     }
 }

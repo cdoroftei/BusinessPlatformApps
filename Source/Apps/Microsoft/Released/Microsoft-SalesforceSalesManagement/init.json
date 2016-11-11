@@ -9,6 +9,13 @@
           "Full cloud solution with minimum set up and maintenance considerations",
           "Data pulled from Salesforce into an Azure SQL Database using Azure Data Factory",
           "Connect to Azure SQL and import data into Power BI"
+        ],
+        "requirements": [
+          "Azure Subscription",
+          "Salesforce Subscription",
+          "Azure SQL Database",
+          "Power BI Desktop (latest version)",
+          "Power BI Pro (to share the template with your organization)"
         ]
       },
       {
@@ -30,7 +37,7 @@
         "showNewSqlOption": true,
         "subtitle": "Set up a connection to SQL so we can bring in your Salesforce data.",
         "title": "Connect to your SQL Database",
-        "sqlInstance": "SalesforceDB"
+        "newSqlDatabase": "SalesforceDB"
       },
       {
         "name": "customize.html",
@@ -56,7 +63,8 @@
         "displayname": "Progress",
         "finishedActionName": "Microsoft-ADFSliceStatus",
         "targetSchema": "dbo",
-        "filename": "$('SalesManagementReport.pbix', isSaved=true)"
+        "filename": "$('SalesManagementReport.pbix', isSaved=true)",
+        "showCounts":  true
       }
     ],
     "Actions": [

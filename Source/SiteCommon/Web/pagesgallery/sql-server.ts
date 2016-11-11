@@ -1,7 +1,7 @@
 ﻿import { ViewModelBase } from '../services/viewmodelbase';
-import {DataStoreType} from "../services/datastore";
-import {SqlServerValidationUtility} from "../base/sql-server-validation-utility";
-import {ActionResponse} from "../services/actionresponse";
+import { DataStoreType } from '../services/datastore';
+import { SqlServerValidationUtility } from '../base/sql-server-validation-utility';
+import { ActionResponse } from '../services/actionresponse';
 
 export class SqlServer extends ViewModelBase {
     subtitle: string = '';
@@ -49,7 +49,6 @@ export class SqlServer extends ViewModelBase {
         this.isWindowsAuth = this.auth.toLowerCase() === 'windows';
     }
 
-
     async OnValidate(): Promise<boolean> {
         if (!super.OnValidate()) {
             return false;
@@ -83,7 +82,6 @@ export class SqlServer extends ViewModelBase {
         return this.isValidated;
     }
 
-
     async NavigatingNext(): Promise<boolean> {
 
         let body = this.GetBody(true);
@@ -113,7 +111,6 @@ export class SqlServer extends ViewModelBase {
 
         return true;
     }
-
 
     private async GetDatabases() {
         let body: any = this.GetBody(true);

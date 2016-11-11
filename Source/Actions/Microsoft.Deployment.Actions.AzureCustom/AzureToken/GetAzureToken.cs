@@ -25,7 +25,11 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
             string tokenUrl = string.Format(Constants.AzureTokenUri, aadTenant);
             HttpClient client = new HttpClient();
 
-            var builder = GetTokenUri(code, Constants.AzureManagementCoreApi, request.Info.WebsiteRootUrl);
+            string clientId = !string.IsNullOrEmpty(request.DataStore.GetValue("IsMsCrm"))
+                ? Constants.DynamicsCRMClientId
+                : Constants.MicrosoftClientId;
+
+            var builder = GetTokenUri(code, Constants.AzureManagementCoreApi, request.Info.WebsiteRootUrl, clientId);
             var content = new StringContent(builder.ToString());
             content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
             var response = await client.PostAsync(new Uri(tokenUrl), content).Result.Content.ReadAsStringAsync();
@@ -46,12 +50,12 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
             return new ActionResponse(ActionStatus.Success, obj, true);
         }
 
-        private static StringBuilder GetTokenUri(string code, string uri, string rootUrl)
+        private static StringBuilder GetTokenUri(string code, string uri, string rootUrl, string clientId)
         {
             Dictionary<string, string> message = new Dictionary<string, string>
             {
                 {"code", code},
-                {"client_id", Constants.MicrosoftClientId},
+                {"client_id", clientId},
                 {"client_secret", Uri.EscapeDataString(Constants.MicrosoftClientSecret)},
                 {"resource", Uri.EscapeDataString(uri)},
                 {"redirect_uri", Uri.EscapeDataString(rootUrl + Constants.WebsiteRedirectPath)},

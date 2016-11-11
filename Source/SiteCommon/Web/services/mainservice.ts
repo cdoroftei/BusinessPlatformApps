@@ -27,7 +27,7 @@ export default class MainService {
     UtilityService: UtilityService;
     appName: string;
     templateData: any;
-    experienceType: string;
+    experienceType: ExperienceType;
 
     constructor(router, httpClient) {
         this.Router = router;
@@ -35,8 +35,10 @@ export default class MainService {
 
 
         this.UtilityService = new UtilityService(this);
-        this.appName = this.UtilityService.GetQueryParameter('name');
-        this.experienceType = this.UtilityService.GetQueryParameter('type');
+        this.appName = this.UtilityService.GetQueryParameter('name'); 
+
+        let experienceTypeString: string = this.UtilityService.GetQueryParameter('type');
+        this.experienceType = ExperienceType[<string>experienceTypeString];
 
         this.ErrorService = new ErrorService(this);
         this.HttpService = new HttpService(this, httpClient);
@@ -73,11 +75,13 @@ export default class MainService {
                 case ExperienceType.uninstall: {
                     pages = 'UninstallPages';
                     actions = 'UninstallActions';
+                    this.DeploymentService.experienceType = this.experienceType;
                     break;
                 }
                 default: {
                     pages = 'Pages';
                     actions = 'Actions';
+                    this.DeploymentService.experienceType = ExperienceType.install;
                     break;
                 }
             }

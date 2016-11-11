@@ -14,6 +14,10 @@ namespace Microsoft.Deployment.Actions.Test.TestHelpers
 
         public AAD AAD { get; set; }
 
+        public SqlCreds Sql { get; set; }
+
+        public SalesforceCreds Salesforce { get; set; }
+
         public static void Load()
         {
             Credential cred = new Credential();

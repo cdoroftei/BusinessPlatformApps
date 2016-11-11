@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Dynamic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,9 +27,8 @@ namespace Microsoft.Deployment.Actions.Test.ActionsTest
             dataStore.AddToDataStore("SqlConnectionString", (sqlResponse.Body as JObject)["value"].ToString(), DataStoreType.Private);
             dataStore.AddToDataStore("FileName", "SCCMSolutionTemplate.pbix");
             var response = TestHarness.ExecuteAction("Microsoft-WranglePBI", dataStore);
-
+            
             Assert.IsTrue(response.Status == ActionStatus.Success);
-
         }
 
         private ActionResponse GetSqlPagePayload()

@@ -63,7 +63,8 @@ namespace Microsoft.Deployment.Site.Service.Controllers
                 UserGenId = userGenId,
                 UserId = userId,
                 WebsiteRootUrl = referer,
-                SerivceRootUrl = "" // Addressed Later
+                ServiceRootUrl = this.Request.RequestUri.GetLeftPart(UriPartial.Authority),
+                ServiceRelativePath = "/bin"
             };
 
             return new CommonController(WebApiConfig.CommonControllerModel)
@@ -124,7 +125,9 @@ namespace Microsoft.Deployment.Site.Service.Controllers
                 UserGenId = userGenId,
                 UserId = userId,
                 WebsiteRootUrl = referer,
-                SerivceRootUrl = "" // Addressed Later
+                ServiceRootUrl = this.Request.RequestUri.GetLeftPart(UriPartial.Authority),
+                ServiceRelativePath = "/bin"
+                
             };
 
             return new CommonController(WebApiConfig.CommonControllerModel)

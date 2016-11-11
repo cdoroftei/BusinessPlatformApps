@@ -15,12 +15,12 @@
     {
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            string token = request.DataStore.GetAllValues("Token")[0];
-            string orgURL = request.DataStore.GetAllValues("organizationUrl")[0];
+            string token = request.DataStore.GetValue("MsCrmToken");
+            string orgURL = request.DataStore.GetValue("OrganizationUrl");
             AuthenticationHeaderValue bearer = new AuthenticationHeaderValue("Bearer", token);
 
             RestClient rc = new RestClient(MsCrmEndpoints.ENDPOINT, bearer);
-            string response = rc.Get(MsCrmEndpoints.URL_ORGANIZATION_METADATA, $"organizationUrl={WebUtility.UrlEncode(orgURL)}");
+            string response = await rc.Get(MsCrmEndpoints.URL_ORGANIZATION_METADATA, $"organizationUrl={WebUtility.UrlEncode(orgURL)}");
             // MsCrmOrganization org = JsonConvert.DeserializeObject<MsCrmOrganization>(response);
 
             return string.IsNullOrWhiteSpace(response) ? new ActionResponse(ActionStatus.Failure, new JObject(), "MsCrm_NoOrg") :

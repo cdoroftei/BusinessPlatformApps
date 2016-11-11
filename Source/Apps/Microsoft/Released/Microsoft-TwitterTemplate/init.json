@@ -80,18 +80,19 @@
             },
 
             // Progress
-            {
-                "name": "$SiteCommon$/pagesgallery/progress.html",
-                "displayname": "Deploy",
-                "uniqueId": "$(this.MS.UtilityService.GetUniqueId(18))",
-                "uniqueIdFunction": "$(this.MS.UtilityService.GetUniqueId(18), )",
+          {
+            "name": "$SiteCommon$/pagesgallery/progress.html",
+            "displayname": "Deploy",
+            "uniqueId": "$(this.MS.UtilityService.GetUniqueId(18))",
+            "uniqueIdFunction": "$(this.MS.UtilityService.GetUniqueId(18), )",
 
-                "LogicAppHostingPlan": "$(this.uniqueId, issaved=true)",
-                "LogicAppName": "$(this.uniqueId, issaved=true)",
-                "LogicAppNameHistorical": "$(this.uniqueId, issaved=true)",
-                "SiteName": "$(this.uniqueIdFunction, issaved=true)",
-                "functionAppHostingPlan": "$(this.uniqueIdFunction, issaved=true)"
-            }
+            "LogicAppHostingPlan": "$(this.uniqueId, issaved=true)",
+            "LogicAppName": "$(this.uniqueId, issaved=true)",
+            "LogicAppNameHistorical": "$(this.uniqueId, issaved=true)",
+            "SiteName": "$(this.uniqueIdFunction, issaved=true)",
+            "functionAppHostingPlan": "$(this.uniqueIdFunction, issaved=true)",
+            "filename": "$('report.pbix', isSaved=true)"
+          }
         ],
 
         "Actions": [

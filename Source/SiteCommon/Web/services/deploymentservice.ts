@@ -3,6 +3,8 @@ import { ActionResponse } from './actionresponse';
 import { ActionStatus } from './actionresponse';
 import {DataStoreType} from "./datastore";
 
+import {ExperienceType} from '../base/ExperienceType';
+
 export class DeploymentService {
     MS: MainService;
     actions: any[] = [];
@@ -11,13 +13,20 @@ export class DeploymentService {
     hasError: boolean = false;
     isFinished: boolean = false;
     message: string = '';
+    experienceType: ExperienceType;
 
     constructor(MainService) {
         this.MS = MainService;
     }
 
-    async ExecuteActions():Promise<boolean> {
-        this.MS.LoggerService.TrackDeploymentStart();
+    async ExecuteActions(): Promise<boolean> {
+        if (this.experienceType === ExperienceType.uninstall) {
+            this.MS.LoggerService.TrackUninstallStart();
+        }
+        if (this.experienceType === ExperienceType.install) {
+            this.MS.LoggerService.TrackDeploymentStart();
+        }
+
         let lastActionStatus: ActionStatus = ActionStatus.Success;
         this.MS.DataStore.DeploymentIndex = '';
 
@@ -61,7 +70,12 @@ export class DeploymentService {
             this.message = 'Error';
         }
 
-        this.MS.LoggerService.TrackDeploymentEnd(!this.hasError);
+        if (this.experienceType === ExperienceType.uninstall) {
+            this.MS.LoggerService.TrackUninstallEnd(!this.hasError);
+        }
+        if (this.experienceType === ExperienceType.install) {
+            this.MS.LoggerService.TrackDeploymentEnd(!this.hasError);
+        }
         this.isFinished = true;
 
         return !this.hasError;

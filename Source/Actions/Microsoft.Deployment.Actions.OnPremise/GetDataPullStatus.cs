@@ -75,15 +75,18 @@ namespace Microsoft.Deployment.Actions.OnPremise
                 if (!string.IsNullOrEmpty(content))
                 {
                     resp = new ActionResponse(ActionStatus.Success,
+                        JsonUtility.GetJsonObjectFromJsonString(
                         "{isFinished:true,FinishedActionName:\"" +
                         finishedActionName +
-                        "\",TargetSchema:\"" + targetSchema + 
+                        "\",TargetSchema:\"" + targetSchema +
                         "\",status:" + JsonUtility.Serialize(recordCounts) +
-                        ", slices:" + JObject.FromObject(finishedResponse.Body)["value"]?.ToString() + "}");
+                        ", slices:" + JObject.FromObject(finishedResponse.Body)["value"]?.ToString() + "}"));
                 }
                 else
                 {
-                    resp = new ActionResponse(ActionStatus.Success, "{isFinished:true, status:" + JsonUtility.Serialize(recordCounts) + "}");
+                    resp = new ActionResponse(ActionStatus.Success,
+                        JsonUtility.GetJsonObjectFromJsonString(
+                            "{isFinished:true, status:" + JsonUtility.Serialize(recordCounts) + "}"));
                 }
                 return resp;
             }
@@ -94,15 +97,18 @@ namespace Microsoft.Deployment.Actions.OnPremise
                 if (!string.IsNullOrEmpty(content))
                 {
                     resp = new ActionResponse(ActionStatus.Success,
+                        JsonUtility.GetJsonObjectFromJsonString(
                     "{isFinished:false,FinishedActionName:\"" +
                     finishedActionName +
-                     "\",TargetSchema:\"" + targetSchema + 
+                     "\",TargetSchema:\"" + targetSchema +
                      "\",status:" + JsonUtility.Serialize(recordCounts) +
-                    ", slices:" + JObject.FromObject(finishedResponse.Body)["value"]?.ToString() + "}");
+                    ", slices:" + JObject.FromObject(finishedResponse.Body)["value"]?.ToString() + "}"));
                 }
                 else
                 {
-                    resp = new ActionResponse(ActionStatus.Success, "{isFinished:false, status:" + JsonUtility.Serialize(recordCounts) + "}");
+                    resp = new ActionResponse(ActionStatus.Success,
+                        JsonUtility.GetJsonObjectFromJsonString(
+                        "{isFinished:false, status:" + JsonUtility.Serialize(recordCounts) + "}"));
                 }
                 return resp;
             }

@@ -19,7 +19,8 @@ namespace Microsoft.Deployment.Common.Controller
 
         public App App { get; set; }
 
-        public string SerivceRootUrl { get; set; }
+        public string ServiceRootUrl { get; set; }
+        public string ServiceRelativePath { get; set; }
         public string WebsiteRootUrl { get; set; }
     }
 }

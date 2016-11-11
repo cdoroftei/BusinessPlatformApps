@@ -61,30 +61,30 @@ namespace Microsoft.Deployment.Common.Helpers
             throw new HttpRequestException(responseMessage);
         }
 
-        public string Get(string relativeUri, string parameters = null, Dictionary<string, string> headers = null)
+        public async Task<string> Get(string relativeUri, string parameters = null, Dictionary<string, string> headers = null)
         {
             return parameters == null
-                ? HandleRequest(HttpMethod.Get, relativeUri, headers, null).Result
-                : HandleRequest(HttpMethod.Get, string.Concat(relativeUri, '?', parameters), headers, null).Result;
+                ? await HandleRequest(HttpMethod.Get, relativeUri, headers, null)
+                : await HandleRequest(HttpMethod.Get, string.Concat(relativeUri, '?', parameters), headers, null);
         }
 
-        public string Post(string relativeUri, string body, string parameters = null, Dictionary<string, string> headers = null)
+        public async Task<string> Post(string relativeUri, string body, string parameters = null, Dictionary<string, string> headers = null)
         {
             return parameters == null
-                ? HandleRequest(HttpMethod.Post, relativeUri, headers, body).Result
-                : HandleRequest(HttpMethod.Post, string.Concat(relativeUri, '?', parameters), headers, body).Result;
+                ? await HandleRequest(HttpMethod.Post, relativeUri, headers, body)
+                : await HandleRequest(HttpMethod.Post, string.Concat(relativeUri, '?', parameters), headers, body);
         }
 
-        public string Put(string relativeUri, string body, Dictionary<string, string> headers = null)
+        public async Task<string> Put(string relativeUri, string body, Dictionary<string, string> headers = null)
         {
-            return HandleRequest(HttpMethod.Put, relativeUri, headers, body).Result;
+            return await HandleRequest(HttpMethod.Put, relativeUri, headers, body);
         }
 
-        public string Delete(string relativeUri, string parameters = null, Dictionary<string, string> headers = null)
+        public async Task<string> Delete(string relativeUri, string parameters = null, Dictionary<string, string> headers = null)
         {
             return parameters == null
-                ? HandleRequest(HttpMethod.Delete, relativeUri, headers, null).Result
-                : HandleRequest(HttpMethod.Delete, string.Concat(relativeUri, '?', parameters), headers, null).Result;
+                ? await HandleRequest(HttpMethod.Delete, relativeUri, headers, null)
+                : await HandleRequest(HttpMethod.Delete, string.Concat(relativeUri, '?', parameters), headers, null);
         }
     }
 }

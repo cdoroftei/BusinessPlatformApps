@@ -21,9 +21,9 @@
         private string _orgId;
 
 
-        private string GetProfileId(string organizationId, string name)
+        private async Task<string> GetProfileId(string organizationId, string name)
         {
-            string response = _rc.Get(MsCrmEndpoints.URL_PROFILES, $"organizationId={WebUtility.UrlEncode(organizationId)}");
+            string response = await _rc.Get(MsCrmEndpoints.URL_PROFILES, $"organizationId={WebUtility.UrlEncode(organizationId)}");
 
             MsCrmProfile[] profiles = JsonConvert.DeserializeObject<MsCrmProfile[]>(response);
 
@@ -36,15 +36,15 @@
 
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            _token = request.DataStore.GetAllValues("Token")[0];
-            _orgId = request.DataStore.GetAllValues("OrganizationId")[0];
+            _token = request.DataStore.GetValue("MsCrmToken");
+            _orgId = request.DataStore.GetValue("OrganizationId");
             AuthenticationHeaderValue bearer = new AuthenticationHeaderValue("Bearer", _token);
-            _rc = new RestClient(request.DataStore.GetAllValues("ConnectorUrl")[0], bearer);
+            _rc = new RestClient(request.DataStore.GetValue("ConnectorUrl"), bearer);
 
-            string profileId = GetProfileId(_orgId, request.DataStore.GetAllValues("ProfileName")[0]);
+            string profileId = await GetProfileId(_orgId, request.DataStore.GetValue("ProfileName"));
             try
             {
-                string response = _rc.Post(string.Format(MsCrmEndpoints.URL_PROFILES_ACTIVATE, profileId), string.Empty);
+                string response = await _rc.Post(string.Format(MsCrmEndpoints.URL_PROFILES_ACTIVATE, profileId), string.Empty);
                 MsCrmProfile validatedProfile = JsonConvert.DeserializeObject<MsCrmProfile>(response);
 
                 return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());

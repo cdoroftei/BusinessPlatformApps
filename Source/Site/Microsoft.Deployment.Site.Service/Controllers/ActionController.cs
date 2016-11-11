@@ -75,7 +75,8 @@ namespace Microsoft.Deployment.Site.Service.Controllers
                 UserGenId = userGenId,
                 UserId = userId,
                 WebsiteRootUrl = referer,
-                SerivceRootUrl = "" // Addressed Later
+                ServiceRootUrl = this.Request.RequestUri.GetLeftPart(UriPartial.Authority),
+                ServiceRelativePath = "/bin"
             };
 
             ActionResponse response =  await new CommonController(WebApiConfig.CommonControllerModel)

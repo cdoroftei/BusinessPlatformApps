@@ -20,10 +20,10 @@
         private string _token;
         private string _orgId;
 
-        private List<string> RetrieveInvalidEntities(string[] entities)
+        private async Task<List<string>> RetrieveInvalidEntities(string[] entities)
         {
             List<string> result = new List<string>();
-            string response = _rc.Get(MsCrmEndpoints.URL_ENTITIES, "organizationurl=" + _orgUrl);
+            string response = await _rc.Get(MsCrmEndpoints.URL_ENTITIES, "organizationurl=" + _orgUrl);
             MsCrmEntity[] provisionedEntities = JsonConvert.DeserializeObject<MsCrmEntity[]>(response);
 
             for (int i = 0; i < entities.Length; i++)
@@ -43,15 +43,15 @@
 
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            _token = request.DataStore.GetAllValues("Token")[0];
+            _token = request.DataStore.GetValue("MsCrmToken");
             AuthenticationHeaderValue bearer = new AuthenticationHeaderValue("Bearer", _token);
-            _rc = new RestClient(request.DataStore.GetAllValues("ConnectorUrl")[0], bearer);
+            _rc = new RestClient(request.DataStore.GetValue("ConnectorUrl"), bearer);
 
-            _orgUrl = request.DataStore.GetAllValues("OrganizationUrl")[0];
-            _orgId = request.DataStore.GetAllValues("OrganizationId")[0];
-            string name = request.DataStore.GetAllValues("ProfileName")[0];
-            string kV = request.DataStore.GetAllValues("kV")[0];
-            string[] entities = request.DataStore.GetAllValues("Entities")[0].Split(new[] {',', ' ', '\t'}, StringSplitOptions.RemoveEmptyEntries);
+            _orgUrl = request.DataStore.GetValue("OrganizationUrl");
+            _orgId = request.DataStore.GetValue("OrganizationId");
+            string name = request.DataStore.GetValue("ProfileName") ?? "bpst-mscrm-profile";
+            string kV = request.DataStore.GetValue("KeyVault");
+            string[] entities = request.DataStore.GetValue("Entities").Split(new[] {',', ' ', '\t'}, StringSplitOptions.RemoveEmptyEntries);
 
             MsCrmProfile profile = new MsCrmProfile
             {
@@ -69,7 +69,7 @@
                 profile.Entities[i] = e;
             }
 
-            List<string> invalidEntities = RetrieveInvalidEntities(entities);
+            List<string> invalidEntities = await RetrieveInvalidEntities(entities);
 
             if (invalidEntities.Count > 0)
                 return new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject(),
@@ -78,10 +78,10 @@
 
             try
             {
-                string response = _rc.Post(MsCrmEndpoints.URL_PROFILES, JsonConvert.SerializeObject(profile));
+                string response = await _rc.Post(MsCrmEndpoints.URL_PROFILES, JsonConvert.SerializeObject(profile));
                 MsCrmProfile createdProfile = JsonConvert.DeserializeObject<MsCrmProfile>(response);
 
-                return new ActionResponse(ActionStatus.Success, new JObject(createdProfile));
+                return new ActionResponse(ActionStatus.Success, createdProfile.Id);
             }
             catch (Exception e)
             {

@@ -3,7 +3,6 @@ using Microsoft.Deployment.Common.ErrorCode;
 using Microsoft.Deployment.Common.Helpers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Linq;
 
 namespace Microsoft.Deployment.Common.ActionModel
 {
@@ -16,7 +15,7 @@ namespace Microsoft.Deployment.Common.ActionModel
         [JsonConverter(typeof(ResponseObjectConverter))]
         public object Body { get; private set; }
 
-        public bool DoesResponseContainsCredentials { get; set; }
+        public bool IsResponseSensitive { get; private set; }
 
         public bool IsSuccess
         {
@@ -25,7 +24,7 @@ namespace Microsoft.Deployment.Common.ActionModel
 
         public DataStore DataStore { get; set; }
 
-        public ActionResponseExceptionDetail ExceptionDetail { get; set; } = new ActionResponseExceptionDetail();
+        public ActionResponseExceptionDetail ExceptionDetail = new ActionResponseExceptionDetail();
 
         // Used to Serialize and Deserialize for testing purposes only
         public ActionResponse()
@@ -36,9 +35,9 @@ namespace Microsoft.Deployment.Common.ActionModel
         {
         }
 
-        public ActionResponse(ActionStatus status, object response, bool isResponseContainsCredentials = false)
+        public ActionResponse(ActionStatus status, object response, bool isResponseSensitive = false)
         {
-            this.DoesResponseContainsCredentials = isResponseContainsCredentials;
+            this.IsResponseSensitive = isResponseSensitive;
             if (status == ActionStatus.Failure || status == ActionStatus.FailureExpected)
             {
                 this.ExceptionDetail.FriendlyMessageCode = DefaultErrorCodes.DefaultErrorCode;

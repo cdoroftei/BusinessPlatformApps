@@ -4,6 +4,7 @@ using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Deployment.Actions.Test.TestHelpers;
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -14,15 +15,23 @@ namespace Microsoft.Deployment.Actions.Test.ActionsTest
     [TestClass]
     public class SalesforceTests
     {
+        public string sfUsername = Credential.Instance.Salesforce.Username;
+        public string sfPassword = Credential.Instance.Salesforce.Password;
+        public string sfToken = Credential.Instance.Salesforce.Token;
+        public string sqlServer = Credential.Instance.Sql.Server;
+        public string sqlUsername = Credential.Instance.Sql.Username;
+        public string sqlDatabase = Credential.Instance.Sql.Database;
+        public string sqlPassword = Credential.Instance.Sql.Password;
+
         [TestMethod]
         public void SalesforceSqlArtefactsDeploysSuccessful()
         {
             this.CleanDb();
 
             DataStore dataStore = new DataStore();
-            dataStore.AddToDataStore("SalesforceUser", "", DataStoreType.Public);
-            dataStore.AddToDataStore("SalesforcePassword", "", DataStoreType.Private);
-            dataStore.AddToDataStore("SalesforceToken", "", DataStoreType.Private);
+            dataStore.AddToDataStore("SalesforceUser", this.sfUsername, DataStoreType.Public);
+            dataStore.AddToDataStore("SalesforcePassword", this.sfPassword, DataStoreType.Private);
+            dataStore.AddToDataStore("SalesforceToken", this.sfToken, DataStoreType.Private);
             dataStore.AddToDataStore("SalesforceUrl", "https://login.salesforce.com/", DataStoreType.Public);
             dataStore.AddToDataStore("ObjectTables", "Opportunity,Account,Lead,Product2,OpportunityLineItem,OpportunityStage,User,UserRole", DataStoreType.Public);
 
@@ -36,6 +45,20 @@ namespace Microsoft.Deployment.Actions.Test.ActionsTest
             response = TestHarness.ExecuteAction("Microsoft-SalesforceSqlArtefacts", dataStore);
 
             Assert.IsTrue(response.Status == ActionStatus.Success);
+        }
+
+
+        [TestMethod]
+        public void RunSalesforceCredentialValidation()
+        {
+            DataStore dataStore = new DataStore();
+            dataStore.AddToDataStore("SalesforceUser", this.sfUsername, DataStoreType.Public);
+            dataStore.AddToDataStore("SalesforcePassword", this.sfPassword, DataStoreType.Private);
+            dataStore.AddToDataStore("SalesforceToken", this.sfToken, DataStoreType.Private);
+            dataStore.AddToDataStore("SalesforceUrl", "https://login.salesforce.com/", DataStoreType.Public);
+
+            var result = TestHarness.ExecuteAction("Microsoft-ValidateSalesforceCredentials", dataStore);
+            Assert.IsTrue(result.Status == ActionStatus.Success);
         }
 
         [TestMethod]
@@ -60,11 +83,11 @@ namespace Microsoft.Deployment.Actions.Test.ActionsTest
 
             dynamic sqlPayload = new ExpandoObject();
             sqlPayload.SqlCredentials = new ExpandoObject();
-            sqlPayload.SqlCredentials.Server = ".windows.database.net";
+            sqlPayload.SqlCredentials.Server = this.sqlServer;
             sqlPayload.SqlCredentials.AuthType = "azuresql";
-            sqlPayload.SqlCredentials.User = "";
-            sqlPayload.SqlCredentials.Password = "";
-            sqlPayload.SqlCredentials.Database = "";
+            sqlPayload.SqlCredentials.User = this.sqlUsername;
+            sqlPayload.SqlCredentials.Password = this.sqlPassword;
+            sqlPayload.SqlCredentials.Database = this.sqlDatabase;
 
             dataStore.AddObjectDataStore("SqlCredentials", JsonUtility.GetJObjectFromObject(sqlPayload), DataStoreType.Any);
 

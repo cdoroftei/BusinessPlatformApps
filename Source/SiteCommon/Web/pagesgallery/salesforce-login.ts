@@ -22,7 +22,6 @@ export class Salesforce extends ViewModelBase {
     }
 
     async OnValidate(): Promise<boolean> {
-
         this.MS.DataStore.addToDataStore('SalesforceUser', this.salesforceUsername, DataStoreType.Public);
         this.MS.DataStore.addToDataStore('SalesforcePassword', this.salesforcePassword, DataStoreType.Private);
         this.MS.DataStore.addToDataStore('SalesforceToken', this.salesforceToken, DataStoreType.Private);

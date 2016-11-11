@@ -44,11 +44,13 @@ namespace Microsoft.Deployment.Actions.Test.TestHelpers
 
         public static async Task<DataStore> GetUserTokenFromPopup()
         {
+            dynamic tokenObj = new ExpandoObject();
+#if DEBUG
             AuthenticationContext context = new AuthenticationContext("https://login.windows.net/" + Credential.Instance.AAD.TenantId);
             var token = await context.AcquireTokenAsync(Constants.AzureManagementCoreApi, Constants.MicrosoftClientId, new Uri("https://unittest/redirect.html"), new PlatformParameters(PromptBehavior.Auto
                 ));
-            dynamic tokenObj = new ExpandoObject();
             tokenObj.access_token = token.AccessToken;
+#endif
 
             DataStore datastore = new DataStore();
             datastore.AddToDataStore("AzureToken", JObject.FromObject(tokenObj), DataStoreType.Private);
