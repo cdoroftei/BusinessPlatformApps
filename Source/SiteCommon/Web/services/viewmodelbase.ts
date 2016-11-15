@@ -37,7 +37,7 @@ export class ViewModelBase {
         // Load the parameters from the additionalParamters section
         if (!this.parametersLoaded) {
             var parameters = this.MS.NavigationService.getCurrentSelectedPage().Parameters;
-            this.loadVariables(this, parameters);
+            JsonCustomParser.loadVariables(this, parameters, this.MS);
         }
 
         this.parametersLoaded = true;
@@ -183,7 +183,7 @@ export class ViewModelBase {
             let name: string = actionToExecute.name;
             if (name) {
                 var body = {};
-                this.loadVariables(body, actionToExecute);
+                JsonCustomParser.loadVariables(body, actionToExecute,this.MS);
 
                 var response: ActionResponse = await this.MS.HttpService.executeAsync(name, body);
                 if (!response.IsSuccess) {
@@ -195,25 +195,5 @@ export class ViewModelBase {
         }
 
         return true;
-    }
-
-    private loadVariables(objToChange, obj: any) {
-        for (let propertyName in obj) {
-            let val: string = obj[propertyName];
-            if (JsonCustomParser.isVariable(val)) {
-                const codeToRun = JsonCustomParser.extractVariable(val);
-                val = eval(codeToRun);
-
-                if (JsonCustomParser.isPermenantEntryIntoDataStore(obj[propertyName])) {
-                    this.MS.DataStore.addToDataStore(propertyName, val, DataStoreType.Private);
-                }
-            }
-            
-            objToChange[propertyName] = val;
-
-            if (val && typeof (val) === 'object') {
-                this.loadVariables(objToChange[propertyName], val);
-            }
-        }
     }
 }

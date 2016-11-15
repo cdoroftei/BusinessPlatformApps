@@ -2,7 +2,7 @@
 import { ActionResponse } from './actionresponse';
 import { ActionStatus } from './actionresponse';
 import {DataStoreType} from "./datastore";
-
+import { JsonCustomParser } from "../base/JsonCustomParser";
 import {ExperienceType} from '../base/ExperienceType';
 
 export class DeploymentService {
@@ -39,6 +39,8 @@ export class DeploymentService {
             if (lastActionStatus !== ActionStatus.BatchWithState) {
                 param = this.actions[i].AdditionalParameters;
             }
+
+            JsonCustomParser.loadVariables(param, param, this.MS);
 
             this.MS.LoggerService.TrackDeploymentStepStartEvent(i, this.actions[i].OperationName);
             let response = await this.MS.HttpService.executeAsync(this.actions[i].OperationName, param);

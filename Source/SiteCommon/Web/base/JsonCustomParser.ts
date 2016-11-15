@@ -1,4 +1,27 @@
-﻿export class JsonCustomParser {
+﻿import MainService from "../services/mainservice";
+import * as Datastore from "../services/datastore";
+
+export class JsonCustomParser {
+
+    public static loadVariables(objToChange, obj: any, MS: MainService) {
+        for (let propertyName in obj) {
+            let val: string = obj[propertyName];
+            if (JsonCustomParser.isVariable(val)) {
+                const codeToRun = JsonCustomParser.extractVariable(val);
+                val = eval(codeToRun);
+
+                if (JsonCustomParser.isPermenantEntryIntoDataStore(obj[propertyName])) {
+                    MS.DataStore.addToDataStore(propertyName, val, Datastore.DataStoreType.Private);
+                }
+            }
+
+            objToChange[propertyName] = val;
+
+            if (val && typeof (val) === 'object') {
+                this.loadVariables(objToChange[propertyName], val, MS);
+            }
+        }
+    }
 
     public static isVariable(value: string): boolean {
         value = value.toString();
