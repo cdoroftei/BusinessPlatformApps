@@ -1,37 +1,30 @@
 {
     "Install": {
         "Pages": [
-
-            //GettingStarted
             {
-                "name": "$SiteCommon$/pagesgallery/getting-started.html",
-                "displayname": "Getting Started",
                 "architectureDiagram": "dist/Apps/Microsoft/Released/Microsoft-TwitterTemplate/Web/twitterArchitectureDiagram.png",
-                "features": [
-                    "Full cloud solution with minimum set up and maintenance considerations",
-                    "Real time data pulled from Twitter & enriched using machine learning",
-                    "Connect to Azure SQL and import data into Power BI"
-                ],
-
-                "requirements": [
+                "displayname": "Getting Started",
+                "list1": [
                     "Azure Subscription",
                     "Power BI Desktop (latest version)",
                     "Power BI Pro (to share the template with your organization)",
                     "Twitter Account"
                 ],
-                "subtitle": "'Welcome to the public preview of the brand and campaign management solution template",
+                "list2": [
+                    "Full cloud solution with minimum set up and maintenance considerations",
+                    "Real time data pulled from Twitter & enriched using machine learning",
+                    "Connect to Azure SQL and import data into Power BI"
+                ],
+                "name": "$SiteCommon$/pagesgallery/getting-started.html",
+                "subtitle": "Welcome to the public preview of the brand and campaign management solution template.",
                 "templateName": "'Brand and Campaign Management for Twitter"
             },
-
-            // AzurePage
             {
-                "name": "$SiteCommon$/pagesgallery/azure-login.html",
                 "displayname": "Login",
-                "pricingUrl": "http://url",
-                "pricingCost": "Cost goes here"
+                "name": "$SiteCommon$/pagesgallery/azure-login.html",
+                "pricingCost": "Cost goes here",
+                "pricingUrl": "http://url"
             },
-
-            // SQL Server Page
             {
                 "name": "$SiteCommon$/pagesgallery/sql-server.html",
                 "displayname": "Source",
@@ -43,32 +36,22 @@
                 "sqlInstance": "NewSql",
                 "newSqlDatabase": "twitterDB"
             },
-
-            // Cognitive Page
             {
                 "name": "$SiteCommon$/pagesgallery/cognitive-services.html",
                 "displayname": "Cognitive Api"
             },
-
-            // Twitter Page
             {
                 "name": "$SiteCommon$/pagesgallery/twitter.html",
                 "displayname": "Twitter"
             },
-
-            // Twitter Search Page
             {
                 "name": "$SiteCommon$/pagesgallery/search-terms.html",
                 "displayname": "Search Terms"
             },
-
-            // Twitter Handles
             {
                 "name": "$SiteCommon$/pagesgallery/twitter-handles.html",
                 "displayname": "Twitter Handles"
             },
-
-            // Summary
             {
                 "name": "$SiteCommon$/pagesgallery/summary.html",
                 "displayname": "Summary",
@@ -78,21 +61,19 @@
                     "Target Username": "$(this.MS.DataStore.getValue('Username'))"
                 }
             },
+            {
+                "name": "$SiteCommon$/pagesgallery/progress.html",
+                "displayname": "Deploy",
+                "uniqueId": "$(this.MS.UtilityService.GetUniqueId(18))",
+                "uniqueIdFunction": "$(this.MS.UtilityService.GetUniqueId(18), )",
 
-            // Progress
-          {
-            "name": "$SiteCommon$/pagesgallery/progress.html",
-            "displayname": "Deploy",
-            "uniqueId": "$(this.MS.UtilityService.GetUniqueId(18))",
-            "uniqueIdFunction": "$(this.MS.UtilityService.GetUniqueId(18), )",
-
-            "LogicAppHostingPlan": "$(this.uniqueId, issaved=true)",
-            "LogicAppName": "$(this.uniqueId, issaved=true)",
-            "LogicAppNameHistorical": "$(this.uniqueId, issaved=true)",
-            "SiteName": "$(this.uniqueIdFunction, issaved=true)",
-            "functionAppHostingPlan": "$(this.uniqueIdFunction, issaved=true)",
-            "filename": "$('report.pbix', isSaved=true)"
-          }
+                "LogicAppHostingPlan": "$(this.uniqueId, issaved=true)",
+                "LogicAppName": "$(this.uniqueId, issaved=true)",
+                "LogicAppNameHistorical": "$(this.uniqueId, issaved=true)",
+                "SiteName": "$(this.uniqueIdFunction, issaved=true)",
+                "functionAppHostingPlan": "$(this.uniqueIdFunction, issaved=true)",
+                "filename": "$('report.pbix', isSaved=true)"
+            }
         ],
 
         "Actions": [

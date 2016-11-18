@@ -1,4 +1,7 @@
-﻿namespace Microsoft.Deployment.Actions.Test.ActionsTest
+﻿using System.IO;
+using Microsoft.Deployment.Common.Helpers;
+
+namespace Microsoft.Deployment.Actions.Test.ActionsTest
 {
     using Microsoft.Deployment.Common.ActionModel;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -8,6 +11,8 @@
     [TestClass]
     public class OnPremiseTests
     {
+        public string targetPath = Path.GetRandomFileName();
+
         [TestMethod]
         [Ignore]
         public void CreateTaskWithCorrectCredentialsSuccess()
@@ -45,7 +50,7 @@
         public void InstallSCCMSuccess()
         {
             var dataStore = new DataStore();
-
+            dataStore.AddToDataStore("TargetPath", targetPath);
             var result = TestHarness.ExecuteAction("Microsoft-InstallSCCM", dataStore);
             Assert.IsTrue(result.IsSuccess);
         }
@@ -54,8 +59,9 @@
         public void RemoveFilesSuccess()
         {
             this.InstallSCCMSuccess();
-            var dataStore = new DataStore();
 
+            var dataStore = new DataStore();
+            dataStore.AddToDataStore("TargetPath", targetPath);
             var result = TestHarness.ExecuteAction("Microsoft-RemoveFiles", dataStore);
             Assert.IsTrue(result.IsSuccess);
         }

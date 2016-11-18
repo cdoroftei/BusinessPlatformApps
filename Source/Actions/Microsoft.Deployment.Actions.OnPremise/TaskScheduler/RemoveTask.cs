@@ -21,19 +21,26 @@ namespace Microsoft.Deployment.Actions.OnPremise.TaskScheduler
             {
                 TaskCollection tasks = ts.RootFolder.GetTasks(new Regex(taskName));
 
-                if (tasks.Exists(taskName))
+                try
                 {
-                    foreach (Task task in tasks)
+                    if (tasks.Exists(taskName))
                     {
-                        if (task.Name.EqualsIgnoreCase(taskName))
+                        foreach (Task task in tasks)
                         {
-                            ts.RootFolder.DeleteTask(taskName);
+                            if (task.Name.EqualsIgnoreCase(taskName))
+                            {
+                                ts.RootFolder.DeleteTask(taskName, false);
+                            }
                         }
+
                     }
-                    return new ActionResponse(ActionStatus.Success);
+                }
+                catch (Exception e)
+                {
+                    return new ActionResponse(ActionStatus.Failure, e);
                 }
 
-                return new ActionResponse(ActionStatus.FailureExpected, "Task \"" + taskName + "\" not found.");
+                return new ActionResponse(ActionStatus.Success);
             }
         }
     }

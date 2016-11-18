@@ -38,7 +38,7 @@ export class HttpService {
     }
 
     Close() {
-        this.command.close();
+        this.command.close(!this.MS.DeploymentService.hasError && this.MS.DeploymentService.isFinished);
     }
 
     async getApp(name) {

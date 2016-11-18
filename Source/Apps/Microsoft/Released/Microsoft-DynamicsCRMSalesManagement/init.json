@@ -8,9 +8,9 @@
         ],
         "Pages": [
             {
-                "architectureDiagram": "dist/Apps/Microsoft/Released/Microsoft-DynamicsCRMSalesManagement/Web/Images/dynamicsCRMArchitectureDiagram.png",
+                "architectureDiagram": "dist/Apps/Microsoft/Released/Microsoft-DynamicsCRMSalesManagement/Web/Images/dynamics-crm-sales-management.png",
                 "displayname": "Getting Started",
-                "features": [
+                "list1": [
                     "Full cloud solution with minimum set up and maintenance considerations",
                     "Data pulled from Dynamics CRM into an Azure SQL Database using the Dynamics CRM Export Service",
                     "Connect to Azure SQL and import data into Power BI"

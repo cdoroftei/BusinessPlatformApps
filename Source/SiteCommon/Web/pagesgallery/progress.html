@@ -47,7 +47,7 @@
     </div>
 
     <!-- PBIX Download -->
-    <div class="st-float" if.bind="MS.DeploymentService.isFinished && !MS.DeploymentService.hasError">
+    <div class="st-float" if.bind="MS.DeploymentService.isFinished && !MS.DeploymentService.hasError  && !isUninstall">
         <p class="smallFontSize" if.bind="isPbixReady">
             <a href.bind="pbixDownloadLink" target="${MS.HttpService.isOnPremise ? '_self' : '_blank'}">
                 <button class="primary">Download PBIX</button>
